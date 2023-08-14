@@ -1,0 +1,14 @@
+<div class="dashboard">
+    <div class="onglet">
+        <% data.forEach(function(d){ %>
+            <a href=<%= d.location %> class="elements">
+                <div class="onglet_title">
+                    <span><%= d.name %></span>
+                </div>
+                <div class="onglet_stats">
+                    <span><%= d.counter %></span>
+                </div>
+            </a>
+        <% }); %>
+    </div>
+</div>

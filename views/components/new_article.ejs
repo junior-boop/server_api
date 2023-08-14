@@ -1,0 +1,512 @@
+<div >
+    <form action="" method="post" id="articles">
+
+        <div class="tuto_header">
+            <div class="tuto_titre">
+                <label for="titre">Titre du Tutoriel</label>
+                <input type="text" name="titre" placeholder="Le titre du tuto" class="tuto_titre" required>
+            </div>
+            <div class="tuto_img">
+                <div is = 'image-js' class="btn image">
+                    Images
+                </div>
+            </div>
+            <div class="tuto_desc">
+                <label for="desc">Description du tutoriel</label>
+                <textarea name="desc" id="" cols="30" rows="10" required placeholder="Votre Texte"></textarea>
+            </div>
+            <div class="tuto_auteur_categorie">
+                <div class="tuto_auteur">
+                    <label for="categories">Categories</label>
+                    <select id="categories" name="categories">
+                        <option value="">-- Selectionnez --</option>
+                        <% il.forEach(function(d){ %>
+                            <option value=<%= d.id %>> <%= d.name %> </option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="tuto_auteur">
+                    <label for="auteur">Auteurs</label>
+                    <select id="auteurs" name="auteur">
+                        <option value="">-- Selectionnez --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="add_content">
+                <div class="content_titre">Contenu</div>
+                <div class="ajout">Ajouter</div>
+            </div>
+            <div id="contenu">
+            </div>
+        </div>
+        <div id="save">
+            <div id="btn_save" type="submit">Enregistrer</div>
+        </div>
+
+    </form>
+    <div class="vide"></div>
+</div>
+
+<script>
+    const ajout = document.getElementsByClassName('ajout')[0]
+    const content_desc = document.getElementsByClassName('content_desc')
+
+
+    ajout.addEventListener('click', e => New_conten())
+
+    class TextContent  extends HTMLElement {
+        constructor(){
+            super()
+        }
+
+        connectedCallback(){
+            const HTML = `
+                <textarea name="desc" cols="30" rows="10" required placeholder="Votre Texte" class="second"></textarea>
+                <div class="supprime">
+                    x
+                </div>
+            `
+            
+            this.classList = 'content_text'
+            this.innerHTML = HTML
+        }
+
+        deconnectedCallBack(){
+            console.log("j'enleve le callback")
+        }
+
+        deleteContent(){
+            let supprime = this.getElementsByClassName('supprime')
+            supprime.addEventListener('click', e => console.log('supprime'))
+        }
+    }
+
+    class imageJs extends HTMLDivElement{
+        constructor() {
+            super()
+        }
+
+        state(b = false){
+            return b
+        }
+
+        connectedCallback() {
+            this.appendChild(this.ImagePicker())
+            this.grid_itemps()
+
+            let absolute = this.getElementsByClassName('absolute')[0]
+            let refuse = document.getElementById('refuse')
+            let select = document.getElementById('submit')
+            let tuto_img = this.parentElement
+
+            this.addEventListener('click', e => {
+                    this.appendChild(this.ImagePicker())
+                    absolute.style.display = 'flex'
+                },true)
+            
+            refuse.addEventListener('click', e => {
+                absolute.style.display = 'none'
+                this.ImagePicker().remove()
+                this.state(false)
+            }, true)
+
+            select.addEventListener('click', e => {
+                let radio = this.getElementsByClassName('radio')
+
+                for(let r of radio){
+                    if(r.checked){
+                        tuto_img.style.backgroundImage = `url('http://localhost:3000${r.dataset.path}')`
+                    }
+                }
+                    
+                absolute.style.display = 'none'
+                this.appendChild(this.ImagePicker())
+                this.state(false)
+            }, true)
+            
+        }
+        disconnectedCallback() {
+            refuse.removeEventListener('click', e => {
+
+            this.state(true)
+            }, true)
+        }
+
+        ImagePicker(){
+            const HTML = `
+                <div class = 'imagePicker' >
+                    <div class = 'piker_header'>
+                        <div class = 'titre'>Selectionnez une Image</div>
+                    </div>
+                    <div class = 'piker_content'>
+                        <div id='grid-imag' class='grid'> </div>
+                    </div>
+                    <div class = 'piker_footer'>
+                        <div class = "block">
+                            <div> 
+                                <div id='submit' class = 'btn'> Selectionner </div>
+                                <div id='refuse' class = 'btn'> Annuler </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+
+            let div = document.createElement('div')
+            div.classList = 'absolute'
+            div.innerHTML = HTML
+
+            return div
+        }
+
+        grid_itemps(){
+            let grid_imag = document.getElementById('grid-imag')
+            const HTML = ({imag, name, l}) =>  (`
+                <div>
+                    <div class='img' style = 'background-image: url("http://localhost:3000${imag}")'></div>    
+                    <div class='name'>${name} (${l})</div>  
+                    <input data-path='${imag}' type = 'radio' name ='radio' class = 'radio'>  
+                </div>
+            `)
+
+            fetch('http://localhost:3000/api/images_db')
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(el => {
+                    let div = document.createElement('div')
+                    div.classList = el.images.length > 1 ? 'grid_items opacity' : 'grid_items pointer' ;
+                    div.innerHTML = HTML({
+                        imag : el.images[0].image_path,
+                        name : el.name,
+                        l : el.images.length
+                    })
+
+                    grid_imag.appendChild(div)
+                })
+            })
+        }
+
+        switch(b = false){
+            return b
+        }
+    }
+    
+
+    class imageMultiple extends HTMLElement{
+        constructor() {
+            super()
+        }
+
+        state(b = false){
+            return b
+        }
+
+        connectedCallback() {
+            this.appendChild(this.ImagePicker())
+            this.grid_itemps()
+
+            let absolute = this.getElementsByClassName('absolute')[0]
+            let refuse = document.getElementById('refuse')
+            let select = document.getElementById('submit')
+            let tuto_img = this.parentElement
+
+            this.addEventListener('click', e => {
+                    this.appendChild(this.ImagePicker())
+                    absolute.style.display = 'flex'
+                },true)
+            
+            refuse.addEventListener('click', e => {
+                absolute.style.display = 'none'
+                this.ImagePicker().remove()
+                this.state(false)
+            }, true)
+
+            select.addEventListener('click', e => {
+                let radio = this.getElementsByClassName('radio')
+
+                for(let r of radio){
+                    if(r.checked){
+                        tuto_img.style.backgroundImage = `url('http://localhost:3000${r.dataset.path}')`
+                    }
+                }
+                    
+                absolute.style.display = 'none'
+                this.appendChild(this.ImagePicker())
+                this.state(false)
+            }, true)
+            
+        }
+        disconnectedCallback() {
+            refuse.removeEventListener('click', e => {
+
+            this.state(true)
+            }, true)
+        }
+
+        ImagePicker(){
+            const HTML = `
+                <div class = 'imagePicker' >
+                    <div class = 'piker_header'>
+                        <div class = 'titre'>Selectionnez une Image</div>
+                    </div>
+                    <div class = 'piker_content'>
+                        <div id='grid-imag' class='grid'> </div>
+                    </div>
+                    <div class = 'piker_footer'>
+                        <div class = "block">
+                            <div> 
+                                <div id='submit' class = 'btn'> Selectionner </div>
+                                <div id='refuse' class = 'btn'> Annuler </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+
+            let div = document.createElement('div')
+            div.classList = 'absolute'
+            div.innerHTML = HTML
+
+            return div
+        }
+
+        grid_itemps(){
+            let grid_imag = document.getElementById('grid-imag')
+            const HTML = ({imag, name, l}) =>  (`
+                <div>
+                    <div class='img' style = 'background-image: url("http://localhost:3000${imag}")'></div>    
+                    <div class='name'>${name} (${l})</div>  
+                    <input data-path='${imag}' type = 'radio' name ='radio' class = 'radio'>  
+                </div>
+            `)
+
+            fetch('http://localhost:3000/api/images_db')
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(el => {
+                    let div = document.createElement('div')
+                    div.classList = el.images.length > 1 ? 'grid_items pointer' : 'grid_items  opacity' ;
+                    div.innerHTML = HTML({
+                        imag : el.images[0].image_path,
+                        name : el.name,
+                        l : el.images.length
+                    })
+
+                    grid_imag.appendChild(div)
+                })
+            })
+        }
+
+        switch(b = false){
+            return b
+        }
+    }
+    
+
+
+    class ContenuJs extends HTMLElement {
+        constructor(){
+            super()
+        }
+
+        connectedCallback(){
+            const HTML = `
+            <div class="content_img">
+                <div class="input_img">
+                    <image-multiple class='btn'> Images ou sequences d'images </image-multiple>
+                </div>
+            </div>
+            <div class="content_titre">
+                <label for="titre">Titre Etape</label>
+                <input type="text" name="titre" placeholder="Le titre du tuto" class="tuto_titre" required>
+            </div>
+            <div class="content_desc">
+                <div>
+                    <label for="desc">Description du tutoriel</label>
+                    <div class="ajout_desc">+</div>
+                </div>
+                
+                <div class="content_text">
+                    <textarea name="desc" cols="30" rows="10" required placeholder="Votre Texte"></textarea>
+                </div>
+            </div>
+            <div class = 'delete'>
+                Del
+            </div>
+            `
+            this.innerHTML = HTML
+
+
+
+           this.addContent()
+           this.deleteContainer()
+           this.save_btn()
+        }
+
+        disconnectedCallback(){
+            window.removeEventListener('load', () => {
+                this.addContent()
+                this.deleteContainer()
+            })
+        }
+
+        save_btn(){
+            const Id = document.getElementById('btn_save')
+
+            console.log(Id)
+
+            Id.addEventListener('click', e => {
+                this.save()
+            })
+        }
+
+        addContent(){
+            let plus = this.getElementsByClassName('ajout_desc')[0]
+            const content_desc = this.getElementsByClassName('content_desc')[0]
+            plus.addEventListener('click', e => {
+                content_desc.appendChild(this.TextContent())
+                this.deleteContent()
+            })
+            
+        }
+
+        deleteContent(){
+            let supprime = this.getElementsByClassName('supprime')
+
+            for(let s of supprime){
+                s.addEventListener('click', e => s.parentNode.remove())
+            }
+        }
+
+        TextContent(){
+            const div = document.createElement('div')
+            const HTML = `
+                <textarea name="desc" cols="30" rows="10" required placeholder="Votre Texte" class="second"></textarea>
+                <div class="supprime">
+                    x
+                </div>
+            `
+            
+            div.classList = 'content_text'
+            div.innerHTML = HTML
+
+            return div
+        }
+
+        deleteContainer(){
+            let del = this.getElementsByClassName('delete')[0]
+
+            del.addEventListener('click', e => this.parentNode.remove())
+        }
+        
+        save(){
+            let img = this.getElementsByClassName('input_img')[0]
+            let titre = this.getElementsByClassName('tuto_titre')[0]
+            let textarea = this.getElementsByTagName('textarea')
+
+            const objet = {}
+            objet.img = img.value;
+            objet.titre = titre.value
+            objet.textarea = []
+
+            for(let el of textarea){
+                objet.textarea.push(el.value)
+            }
+            
+            console.log(objet)
+
+            let local = sessionStorage.getItem('content')
+            let data = []
+
+            if (local === null) sessionStorage.setItem('content', JSON.stringify(data))
+            else {
+                data.push(local)
+                sessionStorage.setItem('content', JSON.stringify(data))
+            }
+
+        }
+        
+        
+    }
+
+
+    
+    window.customElements.define('text-js', TextContent)
+    window.customElements.define('contenu-js', ContenuJs)
+    window.customElements.define('image-js', imageJs, {extends : 'div'})
+    window.customElements.define('image-multiple', imageMultiple, )
+    
+    function New_conten(){
+        const contenu = document.getElementById('contenu')
+        
+
+        const div = document.createElement('div')
+        // div.setAttribute('is', 'contenu-js')
+        div.classList = 'contenu_2'
+        div.innerHTML = '<contenu-js></contenu-js>'
+
+        contenu.appendChild(div)
+    }
+
+    class Tutoriel {
+        constructor(id_auteur, category, titre, image, contenu){
+            this.id_auteur = id_auteur;
+            this.category = category;
+            this.titre = titre;
+            this.image = image;
+            this.contenu = contenu;
+        }
+
+        Register(){
+            const { id_auteur, category, titre, image, contenu } = this;
+
+                let Data = []
+                console.log(data)
+
+                if (data === null) { return fs.writeFileSync('data.json', JSON.stringify([])) }
+                else {
+                    Data = JSON.parse(data)
+
+                    const tuto = {
+                        id_auteur: id_auteur,
+                        category: category,
+                        titre: titre,
+                        image: image,
+                        created_at: Date.now(),
+                        created_at_normal: new Date(),
+                        contenu: contenu
+                    }
+
+                    Data.push(tuto)
+                }
+            
+        }
+    }
+
+    const auteur = document.getElementById('auteurs')
+    
+    fetch('http://localhost:3000/api/auteurs')
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(el => {
+            auteur.innerHTML += `<option value='${el.id}'>${el.name} ${el.surname}</option>`
+        });
+    })
+
+    const refuse = document.getElementById('refuse')
+
+    function on(){
+        const select = document.getElementById('submit')
+        select.addEventListener('click', e => {
+            document.getElementsByClassName('absolute')[0].style.display = 'none'
+        })
+
+    }
+
+    on()
+
+
+
+</script>

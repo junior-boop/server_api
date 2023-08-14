@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="32.5px" height="11px" viewBox="0 0 32.5 11" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <g id="fleche_plus" transform="translate(1 1)">
+    <path d="M0 4.5L25 4.5" id="Line" fill="none" fill-rule="evenodd" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M25.5 0L30.1154 4C30.1154 4 30.5 4.25 30.5 4.5C30.5 4.75 30.1154 5 30.1154 5L25.5 9" id="New-shape" fill="none" fill-rule="evenodd" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

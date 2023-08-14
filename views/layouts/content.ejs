@@ -1,0 +1,203 @@
+<div id="content">
+   <div class="page_content">
+    <%- include('../components/entete') %>
+    <% if(name == 'Tableau de bord') {%>
+      <div class="dashboard">
+         <h1>Stats</h1>
+         <div class="onglet">
+             <a href="/tutos" class="elements">
+                 <div class="onglet_title">
+                     <span>Les Tutoriels</span>
+                 </div>
+                 <div class="onglet_stats">
+                     <span>00</span><span>|</span>
+                     <span>12</span>
+                 </div>
+             </a>
+             <a href="/procedure" class="elements">
+                 <div class="onglet_title">
+                     <span>Procédures Administratives</span>
+                 </div>
+                 <div class="onglet_stats">
+                     <span>00</span><span>|</span>
+                     <span>12</span>
+                 </div>
+             </a>
+             <a href="auteur" class="elements">
+                 <div class="onglet_title">
+                     <span>Auteurs</span>
+                 </div>
+                 <div class="onglet_stats">
+                     <span>00</span><span>|</span>
+                     <span>12</span>
+                 </div>
+             </a>
+             <a href="abonner" class="elements">
+                 <div class="onglet_title">
+                     <span>Abonnés</span>
+                 </div>
+                 <div class="onglet_stats">
+                     <span>00</span><span>|</span>
+                     <span>12</span>
+                 </div>
+             </a>
+         </div>
+     </div>
+     <div class="dashboard">
+        <h1>Les tutos les plus visité</h1>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Tutoriels') { %>
+        <div class="table">
+            <%- include('../components/tutoriel')%>
+        </div>
+        
+   <% } %>
+   <% if(name == 'Santé') {%>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Beauté') {%>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Cuisine') {%>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Sport') {%>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Éducation') {%>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Procédures Administratives') {%>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+                <%- include('../components/items_tuto')%>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Auteurs') {%>
+        <div class="table">
+            <%- include('../components/table_header_auteurs')%>
+            <div class="liste">
+                <% data.forEach(function(d){ %>
+                    <%- include('../components/auteurs', { el : d})%>
+                <% }) %>
+            </div>
+        </div>
+        </div>
+   <% } %>
+   <% if(name == 'Abonner') {%>
+        <div class="table">
+            <%- include('../components/table_header')%>
+            <div class="liste">
+                
+            </div>
+        </div>
+        </div>
+   <% } %>
+  
+   </div>
+   
+</div>
+

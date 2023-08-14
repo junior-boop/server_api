@@ -1,0 +1,56 @@
+<div id="content">
+    <div class="page_content">
+        <%- include('../components/entete') %>
+        <div >
+            <form  method="post" id="auteur" enctype="multipart/form-data" >
+                <div class="left">
+                    <div>
+                        <input type="file" name="image" id="" >
+                        <button>images</button>
+                    </div>            
+                </div>
+                <div class="right">
+                    <div class="name">
+                        <label for="name">Nom et Prenom</label>
+                        <input type="text" name = 'nom' placeholder="Votre nom" required>
+                        <input type="text" name="prenom" placeholder="Votre Prenom">
+                    </div>
+                    <div class="tel">
+                        <label for="tel">
+                            Votre Telephone
+                        </label>
+                        <input type="tel" name="tel" pattern="+237 6[0-9]{2} [0-9]{3} [0-9]{3}" placeholder="+237 699 999 999" required>
+                    </div>
+                    <div class="email">
+                        <label for="email">
+                            Votre Email
+                        </label>
+                        <input type="email" name="email" required placeholder="yourmail@example.com">
+                    </div>
+                    <div class="lien">
+                        <label for="url">
+                            Un lien pour les reseaux sociaux ou votre site personnel
+                        </label>
+                        <input type="url" name="url">
+                    </div>
+                    <div class="categorie">
+                        <label for="categorie">
+                            Categorie
+                        </label>
+                        <select name="categorie" >
+                            <option value=''>-- selectionnez</option>
+                            <% data.forEach(function(d) {%>
+                                <option value=<%= d.name %>><%= d.name %> </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <div class="btn-save">
+                    <button type="submit">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

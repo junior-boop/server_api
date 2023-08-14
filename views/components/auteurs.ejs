@@ -1,0 +1,23 @@
+    <div class="items auteur">
+        <div class="checkbox"><input type="checkbox" name="" id=""></div>
+        <div class="title">
+            <span><%= el.name %> <%= el.surname %> </span>
+        </div>
+        <div class="center">
+            <span> <%= el.categories %></span>
+        </div>
+        <div class="status">
+            <div class="images" style="background-image: url(<%= el.image.path %>) ; background-size: cover; background-repeat: no-repeat; background-position: center center; width: 40px ; height: 40px; border: 1px solid silver; border-radius: 50%; overflow: hidden;">
+               
+            </div>
+        </div>
+        <div class="center">
+            <span><%= el.phone %></span>
+            
+        </div>
+        <div class="autor">
+            <a href=<%= el.website %>>
+                <span><%= el.website %></span>
+            </a>
+        </div>
+    </div>

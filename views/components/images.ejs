@@ -1,0 +1,13 @@
+<div class="grid_items">
+    <div>
+        <div class="images_folder">
+            <div class="first" style="background-position: center center; background-repeat: no-repeat; background-size: cover; background-image: url(<%= el.images[0].image_path %>);"></div>
+            <% if(el.images.length >= 2) { %>
+            <div class="second" style="background-position: center center; background-repeat: no-repeat; background-size: cover; background-image: url(<%= el.images[1].image_path %>);"></div>
+            <% } %>
+        </div>
+        <div class=" folder_name">
+            <%= el.name %> (<%= el.images.length %>)
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <%- include('../layouts/header') %>
+    <div class="grid">
+        <div>
+            <%- include('../layouts/navbar') %>
+        </div>
+       <div>
+            <div id="content">
+                <div class="page_content">
+                    <%- include('../components/entete') %>
+                    
+                    <form class="images" method="post" enctype="multipart/form-data">
+                        <div>
+                            <label for="images">import des Images</label>
+                            <input type="file" name="images" multiple>
+                        </div>
+                        <div>
+                            <label for="name">name</label>
+                            <input type="text" name="name" placeholder="Nom du dossier">
+                        </div>
+                        <button>Ajouter</button>
+                    </form>
+                    <%- include('../layouts/images_grid') %>
+                </div>
+            </div>
+       </div>
+       
+    </div>
+</body>
+<script>
+    const menu = document.getElementsByClassName('menu')[0]
+    let anchor = menu.getElementsByTagName('a')
+
+    window.addEventListener('load', () => {
+    for(let a of anchor){
+        if(a.getAttribute('href') === this.location.pathname ) a.classList = 'active'
+        else console.log('erro')
+    }
+    })
+</script>
+</html> 

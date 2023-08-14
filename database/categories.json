@@ -1,0 +1,38 @@
+[
+ {
+  "name": "Santé",
+  "location": "tutos/sante",
+  "shot": "/beaute",
+  "counter": 0
+ },
+ {
+  "name": "Beauté",
+  "location": "tutos/beaute",
+  "shot": "/beaute",
+  "counter": 0
+ },
+ {
+  "name": "Cuisine",
+  "location": "tutos/cuisine",
+  "shot": "/cuisine",
+  "counter": 0
+ },
+ {
+  "name": "Sports",
+  "location": "tutos/sport",
+  "shot": "/sport",
+  "counter": 0
+ },
+ {
+  "name": "Education",
+  "location": "/tutos/education",
+  "shot": "/education",
+  "counter": 0
+ },
+ {
+  "name": "Procedures Administratives",
+  "location": "/tutos/procedures",
+  "shot": "/procedures",
+  "counter": 0
+ }
+]

@@ -1,0 +1,28 @@
+[
+   {
+      "id": "CnfYRA",
+      "image": {
+         "name": "image_1661065776188.jpg",
+         "path": "/images/image_1661065776188.jpg"
+      },
+      "name": "Daniel",
+      "surname": "Seppo Eke",
+      "phone": "+237 655 733 765",
+      "mail": "juniorseppo3@gmail.com",
+      "website": "https://geniusofdigital.com",
+      "categories": "Education"
+   },
+   {
+      "id": "SIaJIB",
+      "image": {
+         "name": "image_1661072028572.png",
+         "path": "/images/image_1661072028572.png"
+      },
+      "name": "Mandu",
+      "surname": "Laila",
+      "phone": "+237 690 784 821",
+      "mail": "lailamandu21@gmail.com",
+      "website": "https://fb.me/lailahaidamandu",
+      "categories": "Education"
+   }
+]
