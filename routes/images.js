@@ -1,3 +1,4 @@
+
 const express = require('express')
 const multer = require('multer')
 const path = require('path')
@@ -38,6 +39,7 @@ router.post('/', upload.array('images'), async (req, res) => {
             image_size : el.size,
             image_mimetype : el.mimetype,
         }
+        object.path = `/images/${el.filename}`
 
         let tuto_images = new Images(object)
         tuto_images.register()

@@ -1,44 +1,33 @@
-const fs = require('fs')
+const ImagesModel = require('../models/imagesModels')
+const connectToDB = require('../database/database')
 
 class Images {
-    constructor({images}){
+    constructor({images, path}){
         this.images = images;
+        this.path = path
     }
 
     #Image(){
-        console.log(typeof this.images)
         if(typeof this.images === 'object' ) return true
         else return false
     }
 
-    register(){
-        const {images} = this;
+    async register(){
+        const {images, path} = this;
         
         if(this.#Image()){
-            let data = fs.readFileSync('./database/images_db.json', {encoding : 'utf-8', flag : 'r'})
-            let state = JSON.parse(data)
-
-            let object = {
-                id : this.#generated_ID(),
-                images : images
-            }
-
-            state.push(object)
-            fs.writeFileSync('./database/images_db.json', JSON.stringify(state, null, 3))
-            
+            try{
+                await connectToDB()
+                const image = await new ImagesModel({
+                    images : images, 
+                    image_path : path
+                })
+                await image.save()
+            } catch(reason) {
+                console.log(reason)
+            }            
         }
         
-    }
-
-    #generated_ID(){
-        const A = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
-        let id = ''
-        for (let i = 0; i < 6; i++) {
-            const random = Math.floor((Math.random() * 100) * 0.63)
-            id += A[random]
-        }
-
-        return id
     }
 }
 
