@@ -4,7 +4,6 @@ const multer = require('multer')
 const path = require('path')
 const bodyParser = require('body-parser')
 const Images = require('../models/images')
-const db = require('../database/images_db.json')
 
 
 
@@ -23,8 +22,15 @@ const upload = multer({ storage : storage})
 router.use(bodyParser.urlencoded({ extended : true}))
 
 
-router.get('/', (req, res) => { 
-    res.json(db)
+router.get('/', async (req, res) => { 
+    const object = {}
+    object.images = []
+    object.path = ' '
+
+    const images = new Images(object)
+    const data = await images.get()
+
+    res.json(data)
 });
 
 router.post('/', upload.array('images'), async (req, res) => {
@@ -45,7 +51,6 @@ router.post('/', upload.array('images'), async (req, res) => {
         tuto_images.register()
         image_Path.push(object.images.image_path)
     })
-    // await res.redirect('/api/images')
     res.json(image_Path)
 })
 

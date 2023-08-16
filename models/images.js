@@ -29,6 +29,17 @@ class Images {
         }
         
     }
+
+    async get(){
+        try{
+            await connectToDB()
+            const Data = await ImagesModel.find({})
+
+            return Data
+        } catch(reason) {
+            console.log(reason)
+        }
+    }
 }
 
 
