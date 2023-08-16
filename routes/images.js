@@ -27,25 +27,24 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', upload.array('images'), async (req, res) => {
+    const [...imges] = req.files  
+    const image_Path = []
 
-    console.log(req.files, req.body)
-    const [...imges] = req.files
-    
-    const objet = imges.map(el => {
-        return {
+    imges.map(el => {
+        const object = {}
+        object.images = {
             image_name : el.filename,
             image_path : `/images/${el.filename}`,
             image_size : el.size,
             image_mimetype : el.mimetype,
         }
+
+        let tuto_images = new Images(object)
+        tuto_images.register()
+        image_Path.push(object.images.image_path)
     })
-
-
-    // let tuto_images = new Images(objet)
-    // tuto_images.register()
     // await res.redirect('/api/images')
-
-    res.json(objet)
+    res.json(image_Path)
 })
 
 module.exports = router

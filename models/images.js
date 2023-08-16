@@ -1,31 +1,25 @@
 const fs = require('fs')
 
 class Images {
-    constructor({name, images}){
+    constructor({images}){
         this.images = images;
-        this.name = name
     }
 
     #Image(){
+        console.log(typeof this.images)
         if(typeof this.images === 'object' ) return true
-        else return false
-    }
-    
-    #Name(){
-        if(typeof this.name === 'string' ) return true
         else return false
     }
 
     register(){
-        const {images, name} = this;
-
-        if(this.#Image() && this.#Name()){
+        const {images} = this;
+        
+        if(this.#Image()){
             let data = fs.readFileSync('./database/images_db.json', {encoding : 'utf-8', flag : 'r'})
             let state = JSON.parse(data)
 
             let object = {
                 id : this.#generated_ID(),
-                name : name,
                 images : images
             }
 
