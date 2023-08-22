@@ -23,7 +23,10 @@ app.use(bodyParser.urlencoded({extended : true}))
 
 
 app.get('/', (req, res) => {
-  res.render('pages/index', { name : "Tableau de bord", data : categories})
+  res.json({
+    ville : "yaounde",
+    pays : 'Cameroun'
+  })
 });
 
 app.get('/abonner', (req, res) => {

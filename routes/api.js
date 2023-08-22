@@ -8,6 +8,9 @@ const auteurs = require('../database/auteurs.json')
 const categories = require('../database/categories.json')
 const images_db = require('../database/images_db.json')
 const cors = require('cors')
+const path = require('path')
+const articles = require('../routes/articles')
+const ressources = require('../routes/ressources')
 
 
 const storage = multer.diskStorage({
@@ -25,6 +28,8 @@ router.use(bodyParser.urlencoded({ extended : true}))
 
 router.use(cors())
 router.use('/images', images)
+router.use('/articles', articles)
+router.use('/ressources', ressources)
 
 
 router.route('/tutos')
@@ -37,42 +42,46 @@ router.route('/tutos')
         console.log(req.params, req.body)
         
     })
-router.route('/images_db')
+router.route('/image_content')
     .get((req, res) => {
-       res.json(images_db)
+       res.json("images content")
     })
 
-router.post('/images_db', upload.array('images'), async (req, res) => {
+router.post('/image_content', upload.single('image'), async (req, res) => {
 
-        console.log(req)
-
-        // const [...imges] = req.files
-        // const objet = {
-        //     name : req.body.name
-        // }
-
-        // objet.images = imges.map(el => {
-        //     return {
-        //         image_name : el.filename,
-        //         image_path : `/images/${el.filename}`,
-        //         image_size : el.size,
-        //         image_mimetype : el.mimetype,
-        //     }
-        // })
-
-
-        // let tuto_images = new Images(objet)
-        // tuto_images.register()
-        // await res.redirect('/api/images')
-    })
-router.route('/auteurs')
-    .get((req, res) => {
-       res.json(auteurs)
-    })
-
-    .post((req, res) => {
-        console.log(req.params, req.body)
+        const image = req.file
         
+        const response = {
+            success : 1,
+            file: {
+                url : "http://localhost:3000/images/" + image.filename,
+                size : image.size,
+                filename : image.filename
+            }
+        }
+
+        res.json(response)
+        
+    })
+router.route('/fetchUrl')
+    .get(async (req, res) => {
+        const {url} = req.query
+        const metaData = await fetch(`https://jsonlink.io/api/extract?url=${url}`)
+        const { title, description, images, domain} = await metaData.json()
+        console.log( data )
+
+        const response = {
+            success : 1,
+            link: url, 
+            meta: {
+                title,
+                description,
+                image : {
+                    url : images[0]
+                }
+            }
+        }
+        res.json(response)
     })
 
 

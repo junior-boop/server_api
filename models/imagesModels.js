@@ -7,7 +7,8 @@ const imageSchema = new Schema({
             image_name : String,
             image_path : String,
             image_size : Number,
-            image_mimetype : String
+            image_mimetype : String,
+            createdAt : String
         }),
         required : true
     },

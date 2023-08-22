@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
     res.json(data)
 });
 
-router.post('/', upload.array('images'), async (req, res) => {
+router.post('/', upload.array('image'), async (req, res) => {
     const [...imges] = req.files  
     const image_Path = []
 
@@ -44,11 +44,12 @@ router.post('/', upload.array('images'), async (req, res) => {
             image_path : `/images/${el.filename}`,
             image_size : el.size,
             image_mimetype : el.mimetype,
+            createdAt : new Date()
         }
         object.path = `/images/${el.filename}`
 
-        let tuto_images = new Images(object)
-        tuto_images.register()
+        // let tuto_images = new Images(object)
+        // tuto_images.register()
         image_Path.push(object.images.image_path)
     })
     res.json(image_Path)
