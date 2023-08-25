@@ -11,6 +11,7 @@ const cors = require('cors')
 const path = require('path')
 const articles = require('../routes/articles')
 const ressources = require('../routes/ressources')
+const inscriprion = require('../routes/users')
 
 
 const storage = multer.diskStorage({
@@ -30,6 +31,7 @@ router.use(cors())
 router.use('/images', images)
 router.use('/articles', articles)
 router.use('/ressources', ressources)
+router.use('/inscription', inscriprion)
 
 
 router.route('/tutos')
