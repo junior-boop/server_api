@@ -4,9 +4,9 @@ const multer = require('multer')
 const path = require('path')
 
 const router = express.Router();
-const Auteur = require('../models/auteur');
+// const Auteur = require('../models/auteur');
 const connectToDB = require('../database/database');
-const User = require('../models/users');
+// const User = require('../models/users');
 
 const storage = multer.diskStorage({
     destination : (req, file, cb) => {
@@ -57,8 +57,7 @@ router.post('/signin', upload.single('image'), async (req, res) => {
     const {name, surname, tel, mail, pw, town, like, share}  = response;
 
     try{
-        await connectToDB()
-        const user = await new User({
+        const user = {
             name, 
             surname, 
             tel, 
@@ -67,9 +66,7 @@ router.post('/signin', upload.single('image'), async (req, res) => {
             town, 
             like : [],
             share : []
-        })
-
-        await user.save()
+        }
 
         res.json(user)
     } catch(reason) {

@@ -2,13 +2,13 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const multer = require('multer')
 const path = require('path')
-const config = require('../config')
+// const config = require('../config')
 const generated_ID = require('./idgen')
 
 const { ressourcesDb, imagesDB } = require('../database/database')
 
-const Article = require('../models/articles')
-const ImagesModel = require('../models/imagesModels')
+// const Article = require('../models/articles')
+// const ImagesModel = require('../models/imagesModels')
 
 const router = express.Router();
 
@@ -56,8 +56,8 @@ router.post('/', upload.array('image'), async (req, res) => {
         }
         object.path = `/images/${el.filename}`
 
-        let tuto_images = new ImagesModel(object)
-        imagesDB.put(keyImages, tuto_images)
+        
+        imagesDB.put(keyImages, object)
     })
 
     const params = {
@@ -66,7 +66,7 @@ router.post('/', upload.array('image'), async (req, res) => {
     
     try{
         const keyValue = "" + Date.now() + "_" + generated_ID()
-        const article = new Article({
+        const article = {
             key : keyValue,
             images : data_image, 
             contenu : JSON.parse(contenu),
@@ -79,13 +79,13 @@ router.post('/', upload.array('image'), async (req, res) => {
                 surname : '',
                 user_id : ''
             }
-        })
+        }
 
         params.Item = {...article._doc}
 
         ressourcesDb.put(keyValue, JSON.stringify(params))
 
-        res.json(article._doc)
+        res.json(article)
 
     } catch (reason) {
         console.log(reason)

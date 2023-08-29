@@ -3,7 +3,7 @@ const express = require('express');
 const multer = require('multer')
 const path = require('path')
 
-const Ressource = require('../models/ressources')
+// const Ressource = require('../models/ressources')
 
 const router = express.Router();
 
@@ -32,9 +32,9 @@ router.post('/', upload.array('image'), async (req, res) => {
 
     try{
        
-        const ressources = new Ressource({
+        const ressources = {
             images : images, titre, description, createdAt, createdBy, categorie, like, download
-        })
+        }
 
         console.log(ressources)
     } catch (reason) {
@@ -50,9 +50,9 @@ router.get('/add', (req, res) => {
 router.post('/add', async (req, res) => {   
         const {nom, prenom, tel, email, url, categorie}  = req.body;
 
-        let auteur = new Auteur({name : nom, surname : prenom, phone : tel, mail : email, website : url, categories : categorie, imag : images.filename})
-        auteur.register()
-        await res.redirect('/auteur')
+        let auteur = {name : nom, surname : prenom, phone : tel, mail : email, website : url, categories : categorie, imag : images.filename}
+        // auteur.register()
+        res.redirect('/auteur')
     })
 
 module.exports = router

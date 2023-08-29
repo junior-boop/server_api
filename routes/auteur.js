@@ -5,8 +5,7 @@ const path = require('path')
 
 const router = express.Router();
 const Categories = require('../database/categories.json');
-const Auteurs = require('../database//auteurs.json');
-const Auteur = require('../models/auteur');
+const Auteurs = require('../database/auteurs.json');
 
 const storage = multer.diskStorage({
     destination : (req, file, cb) => {
@@ -36,8 +35,8 @@ router.post('/add', upload.single('image'), async (req, res) => {
         // req.on('data', data => console.log(data, images))
         const {nom, prenom, tel, email, url, categorie}  = req.body;
 
-        let auteur = new Auteur({name : nom, surname : prenom, phone : tel, mail : email, website : url, categories : categorie, imag : images.filename})
-        auteur.register()
+        let auteur = {name : nom, surname : prenom, phone : tel, mail : email, website : url, categories : categorie, imag : images.filename}
+        // auteur.register()
         await res.redirect('/auteur')
     })
 
