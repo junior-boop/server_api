@@ -4,12 +4,6 @@ const multer = require('multer')
 const path = require('path')
 
 const Ressource = require('../models/ressources')
-const connectToDB = require('../database/database')
-
-//aws setup
-const AWS = require('aws-sdk');
-AWS.config.update({ region: 'us-west-1' });
-
 
 const router = express.Router();
 
@@ -37,8 +31,7 @@ router.post('/', upload.array('image'), async (req, res) => {
     const {images, titre, description, createdAt, createdBy, categorie, like, share, download} = await req.body
 
     try{
-        const client = new AWS.DynamoDB.DocumentClient()
-        const table = 'ressources'
+       
         const ressources = new Ressource({
             images : images, titre, description, createdAt, createdBy, categorie, like, download
         })
