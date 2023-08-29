@@ -1,11 +1,10 @@
 module.exports = {
-    aws_table_name: 'dynamodb-test',
     aws_local_config: {
       //Provide details for local configuration
     },
     aws_remote_config: {
-      accessKeyId: 'ACCESS_KEY_ID',
-      secretAccessKey: 'SECRET_ACCESS_KEY',
+      accessKeyId: 'AKIATYFDU6HJZS7ZOB7X',
+      secretAccessKey: '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',
       region: 'us-east-1',
     }
 };

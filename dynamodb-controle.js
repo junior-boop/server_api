@@ -1,6 +1,5 @@
 const AWS = require('aws-sdk');
-const config = require('./../../config.js');
-const uuidv1 = require('uuid/v1');
+const uuidv1 = require('uuid');
 
 const getMovies = function (req, res) {
     AWS.config.update(config.aws_remote_config);

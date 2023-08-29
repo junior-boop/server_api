@@ -70,7 +70,7 @@ router.route('/fetchUrl')
         const {url} = req.query
         const metaData = await fetch(`https://jsonlink.io/api/extract?url=${url}`)
         const { title, description, images, domain} = await metaData.json()
-        console.log( data )
+
 
         const response = {
             success : 1,

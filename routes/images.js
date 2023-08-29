@@ -3,7 +3,9 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const bodyParser = require('body-parser')
-const Images = require('../models/images')
+const ImagesModel = require('../models/imagesModels')
+const { imagesDB } = require('../database/database')
+const generated_ID = require('./idgen')
 
 
 
@@ -23,14 +25,13 @@ router.use(bodyParser.urlencoded({ extended : true}))
 
 
 router.get('/', async (req, res) => { 
-    const object = {}
-    object.images = []
-    object.path = ' '
+    const tb = []
+    for await (const [key, value] of imagesDB.iterator()){
+        tb.push({key : key, value : value})
+    }
 
-    const images = new Images(object)
-    const data = await images.get()
-
-    res.json(data)
+    console.log('GET request /images')
+    res.json(tb)
 });
 
 router.post('/', upload.array('image'), async (req, res) => {
@@ -38,6 +39,7 @@ router.post('/', upload.array('image'), async (req, res) => {
     const image_Path = []
 
     imges.map(el => {
+        const keyImages = "" + Date.now() + "_" + generated_ID()
         const object = {}
         object.images = {
             image_name : el.filename,
@@ -48,8 +50,9 @@ router.post('/', upload.array('image'), async (req, res) => {
         }
         object.path = `/images/${el.filename}`
 
-        // let tuto_images = new Images(object)
-        // tuto_images.register()
+        let tuto_images = new ImagesModel(object)
+        imagesDB.put(keyImages, tuto_images)
+
         image_Path.push(object.images.image_path)
     })
     res.json(image_Path)
