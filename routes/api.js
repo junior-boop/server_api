@@ -12,6 +12,7 @@ const path = require('path')
 const articles = require('../routes/articles')
 const ressources = require('../routes/ressources')
 const inscriprion = require('../routes/users')
+const { imagesDB } = require('../database/database')
 
 
 const storage = multer.diskStorage({
@@ -56,12 +57,30 @@ router.post('/image_content', upload.single('image'), async (req, res) => {
         const response = {
             success : 1,
             file: {
-                url : "http://localhost:3000/images/" + image.filename,
+                url : "http://18.215.69.15:3000/images/" + image.filename,
                 size : image.size,
                 filename : image.filename
             }
+        };
+
+        () => {
+            const keyImages = "" + Date.now() + "_" + generated_ID()
+            const object = {}
+            object.images = {
+                image_name : image.filename,
+                image_path : `/images/${el.filename}`,
+                image_size : image.size,
+                image_mimetype : image.mimetype,
+                createdAt : new Date()
+            }
+            object.path = `/images/${image.filename}`
+    
+            // let tuto_images = new ImagesModel(object)
+            imagesDB.put(keyImages, object)
+    
         }
 
+        console.log("==> image save to :", response.file.url)
         res.json(response)
         
     })
