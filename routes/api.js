@@ -75,7 +75,6 @@ router.post('/image_content', upload.single('image'), async (req, res) => {
             }
             object.path = `/images/${image.filename}`
     
-            // let tuto_images = new ImagesModel(object)
             imagesDB.put(keyImages, JSON.stringify(object))
     
         }
