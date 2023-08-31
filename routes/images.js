@@ -3,7 +3,7 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 const bodyParser = require('body-parser')
-const ImagesModel = require('../models/imagesModels')
+// const ImagesModel = require('../models/imagesModels')
 const { imagesDB } = require('../database/database')
 const generated_ID = require('./idgen')
 
@@ -50,11 +50,13 @@ router.post('/', upload.array('image'), async (req, res) => {
         }
         object.path = `/images/${el.filename}`
 
-        let tuto_images = new ImagesModel(object)
-        imagesDB.put(keyImages, tuto_images)
+        // let tuto_images = new ImagesModel(object)
+        imagesDB.put(keyImages, object)
 
         image_Path.push(object.images.image_path)
+        console.log("==> image save to :", 'http://18.215.69.15:3000' + object.images.image_path)
     })
+    
     res.json(image_Path)
 })
 

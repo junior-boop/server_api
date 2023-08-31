@@ -1,46 +1,46 @@
-const ImagesModel = require('../models/imagesModels')
-const connectToDB = require('../database/database')
+// // const ImagesModel = require('../models/imagesModels')
+// const connectToDB = require('../database/database')
 
-class Images {
-    constructor({images, path}){
-        this.images = images;
-        this.path = path
-    }
+// class Images {
+//     constructor({images, path}){
+//         this.images = images;
+//         this.path = path
+//     }
 
-    #Image(){
-        if(typeof this.images === 'object' ) return true
-        else return false
-    }
+//     #Image(){
+//         if(typeof this.images === 'object' ) return true
+//         else return false
+//     }
 
-    async register(){
-        const {images, path} = this;
+//     async register(){
+//         const {images, path} = this;
         
-        if(this.#Image()){
-            try{
-                await connectToDB()
-                const image = await new ImagesModel({
-                    images : images, 
-                    image_path : path
-                })
-                await image.save()
-            } catch(reason) {
-                console.log(reason)
-            }            
-        }
+//         if(this.#Image()){
+//             try{
+//                 await connectToDB()
+//                 const image = await new ImagesModel({
+//                     images : images, 
+//                     image_path : path
+//                 })
+//                 await image.save()
+//             } catch(reason) {
+//                 console.log(reason)
+//             }            
+//         }
         
-    }
+//     }
 
-    async get(){
-        try{
-            await connectToDB()
-            const Data = await ImagesModel.find({})
+//     async get(){
+//         try{
+//             await connectToDB()
+//             const Data = await ImagesModel.find({})
 
-            return Data
-        } catch(reason) {
-            console.log(reason)
-        }
-    }
-}
+//             return Data
+//         } catch(reason) {
+//             console.log(reason)
+//         }
+//     }
+// }
 
 
-module.exports = Images
+// module.exports = Images
