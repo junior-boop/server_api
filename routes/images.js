@@ -51,7 +51,7 @@ router.post('/', upload.array('image'), async (req, res) => {
         object.path = `/images/${el.filename}`
 
         // let tuto_images = new ImagesModel(object)
-        imagesDB.put(keyImages, object)
+        imagesDB.put(keyImages, JSON.stringify(object))
 
         image_Path.push(object.images.image_path)
         console.log("==> image save to :", 'http://18.215.69.15:3000' + object.images.image_path)

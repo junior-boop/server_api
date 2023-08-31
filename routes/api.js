@@ -76,11 +76,11 @@ router.post('/image_content', upload.single('image'), async (req, res) => {
             object.path = `/images/${image.filename}`
     
             // let tuto_images = new ImagesModel(object)
-            imagesDB.put(keyImages, object)
+            imagesDB.put(keyImages, JSON.stringify(object))
     
         }
 
-        console.log("==> image save to :", response.file.url)
+        console.log("==> image save to :", "http://18.215.69.15:3000"+response.file.url)
         res.json(response)
         
     })
@@ -102,6 +102,7 @@ router.route('/fetchUrl')
                 }
             }
         }
+        console.log("==> url fetching for meta data : ", response.meta.title, response.link)
         res.json(response)
     })
 
