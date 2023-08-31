@@ -43,7 +43,7 @@ router.post('/', upload.array('image'), async (req, res) => {
     const table = 'articles'
 
     const [...imges] = req.files  
-
+    const imageData = []
     imges.map(el => {
         const keyImages = "" + Date.now() + "_" + generated_ID()
         const object = {}
@@ -56,8 +56,10 @@ router.post('/', upload.array('image'), async (req, res) => {
         }
         object.path = `/images/${el.filename}`
 
-        
-        imagesDB.put(keyImages, object)
+        imageData.push(object.path)
+        imagesDB.put(keyImages, JSON.stringify(object))
+
+        return object
     })
 
     const params = {
@@ -68,7 +70,7 @@ router.post('/', upload.array('image'), async (req, res) => {
         const keyValue = "" + Date.now() + "_" + generated_ID()
         const article = {
             key : keyValue,
-            images : data_image, 
+            images : imageData, 
             contenu : JSON.parse(contenu),
             titre : titre, 
             imagesAlbum : imagesAlbum,
@@ -81,7 +83,7 @@ router.post('/', upload.array('image'), async (req, res) => {
             }
         }
 
-        params.Item = {...article._doc}
+        params.Item = {...article}
 
         ressourcesDb.put(keyValue, JSON.stringify(params))
 
