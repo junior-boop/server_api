@@ -86,6 +86,7 @@ router.post('/', upload.array('image'), async (req, res) => {
         params.Item = {...article}
 
         ressourcesDb.put(keyValue, JSON.stringify(params))
+        console.log('==> articles enregistre : ', "key : " + keyValue)
 
         res.json(article)
 
