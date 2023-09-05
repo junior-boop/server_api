@@ -4,8 +4,6 @@ const multer = require('multer')
 const path = require('path')
 
 const router = express.Router();
-const Categories = require('../database/categories.json');
-const Auteurs = require('../database/auteurs.json');
 
 const storage = multer.diskStorage({
     destination : (req, file, cb) => {

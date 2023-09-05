@@ -7,9 +7,6 @@ const generated_ID = require('./idgen')
 
 const { ressourcesDb, imagesDB } = require('../database/database')
 
-// const Article = require('../models/articles')
-// const ImagesModel = require('../models/imagesModels')
-
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -83,7 +80,7 @@ router.post('/', upload.array('image'), async (req, res) => {
             }
         }
 
-        params.Item = {...article}
+        params.Item = article
 
         ressourcesDb.put(keyValue, JSON.stringify(params))
         console.log('==> articles enregistre : ', "key : " + keyValue)

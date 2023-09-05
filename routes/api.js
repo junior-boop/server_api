@@ -3,16 +3,19 @@ const bodyParser = require('body-parser')
 const multer = require('multer')
 const router = express.Router()
 const images = require('./images')
-const database = require('../database/database.json')
-const auteurs = require('../database/auteurs.json')
-const categories = require('../database/categories.json')
-const images_db = require('../database/images_db.json')
 const cors = require('cors')
 const path = require('path')
 const articles = require('../routes/articles')
 const ressources = require('../routes/ressources')
 const inscriprion = require('../routes/users')
-const { imagesDB } = require('../database/database')
+const { imagesDB, newsletter } = require('../database/database')
+const generated_ID = require('./idgen')
+
+
+router.use(bodyParser.urlencoded({ extended : false}))
+router.use(bodyParser.json())
+
+
 
 
 const storage = multer.diskStorage({
@@ -25,7 +28,6 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage : storage})
-router.use(bodyParser.urlencoded({ extended : true}))
 
 
 router.use(cors())
@@ -35,16 +37,41 @@ router.use('/ressources', ressources)
 router.use('/inscription', inscriprion)
 
 
-router.route('/tutos')
+
+// news letter
+router.route('/newsletter')
     .get((req, res) => {
-       console.log(req.params.id)
-       res.json(database)
+       res.json("newsletter")
     })
 
-    .post((req, res) => {
-        console.log(req.params, req.body)
-        
-    })
+router.post('/newsletter', upload.single('image'), (req, res) => {
+        const keyImages = "" + Date.now() + "_" + generated_ID()
+        const {mail} = req.body
+        console.log(mail)
+        const Newsletter = {
+            mail, 
+            key : keyImages,
+            createdAt : new Date()
+        } 
+        newsletter.put(keyImages, JSON.stringify(Newsletter))
+        console.log(Newsletter)
+        res.json("mail")
+})
+router.delete('/newsletter/:id', upload.single('image'), (req, res) => {
+        const { id } = req.params
+
+        newsletter.del(id)
+        .then(() => {
+            console.log("==> DEL | mail d'id supprimer : ", id)
+        })
+        .catch (reason => {
+            console.log(reason)
+        }) 
+        res.json("DELETE")
+})
+
+// telechargement de l'image dans l'editeur de texte
+
 router.route('/image_content')
     .get((req, res) => {
        res.json("images content")
@@ -82,7 +109,9 @@ router.post('/image_content', upload.single('image'), async (req, res) => {
         console.log("==> image save to :", "http://18.215.69.15:3000"+response.file.url)
         res.json(response)
         
-    })
+})
+
+// fetch Url 
 router.route('/fetchUrl')
     .get(async (req, res) => {
         const {url} = req.query

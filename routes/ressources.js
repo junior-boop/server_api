@@ -2,8 +2,8 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const multer = require('multer')
 const path = require('path')
+const { ressourcesDb } = require('../database/database')
 
-// const Ressource = require('../models/ressources')
 
 const router = express.Router();
 
@@ -19,7 +19,9 @@ const storage = multer.diskStorage({
 
 
 const upload = multer({ storage : storage})
-router.use(bodyParser.urlencoded({ extended : true}))
+
+router.use(bodyParser.urlencoded({ extended : false}))
+router.use(bodyParser.json())
 
 
 
@@ -27,21 +29,19 @@ router.get('/', async (req, res) => {
     const data = await Ressource.find({})
     res.json(data)
 });
-router.post('/', upload.array('image'), async (req, res) => {
-    const {images, titre, description, createdAt, createdBy, categorie, like, share, download} = await req.body
+router.post('/', async (req, res) => {
+    const { images, titre, description, createdAt, createdBy, categorie, like, download, share } = await req.body
 
     try{
        
-        const ressources = {
-            images : images, titre, description, createdAt, createdBy, categorie, like, download
-        }
+        const ressources = { images, titre, description, createdAt, createdBy, categorie, like, download, share }
 
         console.log(ressources)
+        res.json(ressources)
     } catch (reason) {
         console.log(reason)
+        res.status(500)
     }
-
-    res.json(data)
 });
 
 router.get('/add', (req, res) => {
