@@ -27,7 +27,7 @@ router.use(bodyParser.urlencoded({ extended : true}))
 router.get('/', async (req, res) => {
     const tb = []
     for await (const [key, value] of ressourcesDb.iterator()){
-        tb.push({key : key, value : JSON.parse(value)})
+        tb.push({key : key, value : value})
     }
 
     console.log('GET request /articles')
@@ -109,7 +109,7 @@ router.get('/edit/:id', async (req, res) => {
     console.log('GET request /article/edit/:'+id)
 
     const data = await ressourcesDb.get(id)
-    res.json(JSON.parse(data))
+    res.json(data)
 });
 
 module.exports = router

@@ -20,7 +20,9 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage : storage})
-router.use(bodyParser.urlencoded({ extended : true}))
+router.use(bodyParser.urlencoded({ extended : false}))
+router.use(bodyParser.json())
+
 
 
 router.get('/', async (req, res) => { 
@@ -37,8 +39,6 @@ router.post('/', upload.array('image'), async (req, res) => {
     const [...imges] =  req.files  
     const image_Path = []
 
-    console.log(req.files)
-
     imges.map(el => {
         const keyImages = "" + Date.now() + "_" + generated_ID()
         const object = {}
@@ -51,8 +51,7 @@ router.post('/', upload.array('image'), async (req, res) => {
         }
         object.path = `/images/${el.filename}`
 
-        // let tuto_images = new ImagesModel(object)
-        imagesDB.put(keyImages, JSON.stringify(object))
+        imagesDB.put(keyImages, object)
 
         image_Path.push(object.images.image_path)
         console.log("==> image save to :", 'http://18.215.69.15:3000' + object.images.image_path)
@@ -67,8 +66,8 @@ router.delete('/:id', upload.array('image'), async (req, res) => {
 
 
     const image = await imagesDB.get(id)
-    // console.log(image)
-    const value = JSON.parse(image)
+    
+    const value = image
     const imagename = value.images.image_name
 
     console.log('imagename',imagename)
@@ -91,6 +90,14 @@ router.delete('/:id', upload.array('image'), async (req, res) => {
     }
 
     console.log(`DEL api/images/ | image id: ${id}`)
+    res.json(' ')
+}) 
+router.delete('/', upload.array('image'), async (req, res) => {
+    
+
+    await imagesDB.clear()
+
+    console.log(`DEL api/images/ | image `)
     res.json(' ')
 }) 
 
