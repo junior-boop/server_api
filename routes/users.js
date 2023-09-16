@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage : storage})
 
 router.use(bodyParser.urlencoded({ extended : false}))
+router.use(bodyParser.json())
 
 
 router.get('/', async (req, res) => {
@@ -29,12 +30,13 @@ router.get('/', async (req, res) => {
     console.log(data)
     res.json(data)
 })
+
 router.get('/:id', async (req, res) => {
     const { id } = req.params
-
     try{
         const user = await userDB.get(id)
-        console.log('==> get user with id: ', id, )
+        console.log('==> get user with id: ', id)
+        
         res.json(user)
     } catch (reason){
         console.log(reason)
@@ -51,6 +53,8 @@ router.delete('/:id', async (req, res) => {
 
     res.json(`User with id : ${id}, has been remove correctly`)
 })
+
+// log in
 
 router.get('/login', (req, res) => {
     res.json("je suis sur la route Users")
@@ -104,3 +108,6 @@ router.post('/signin', upload.single('image'), async (req, res) => {
 })
 
 module.exports = router
+
+
+// aws-mail
