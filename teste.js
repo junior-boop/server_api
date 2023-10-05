@@ -11,16 +11,16 @@ const { Level } = require('level')
 const db = new Level('./database')
 const ressourcesDb = db.sublevel('articles', {valueEncoding :'json'})
 const imagesDB = db.sublevel('images', { valueEncoding : 'json'})
-const newsletter = db.sublevel('newsletter')
+const newsletter = db.sublevel('newsletter', {valueEncoding: 'json'})
 const userDB = db.sublevel('user', {valueEncoding : 'json'})
 const ressourcesElementDB = db.sublevel('ressources', { valueEncoding : 'json'})
-const requete = db.sublevel('requete', { valueEncoding : 'json'})
+const requete = db.sublevel('requete', {valueEncoding : 'json'})
+const files_db = db.sublevel('files_db', {valueEncoding : 'json'})
 
 const generated_ID = require('./routes/idgen')
 
 // function generated_ID(){
-//     const A = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_'
-//     let id = ''
+//     const A = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567>//     let id = ''
 //     for (let i = 0; i < 6; i++) {
 //         const random = Math.floor((Math.random() * 100) * 0.63)
 //         id += A[random]
@@ -31,25 +31,32 @@ const generated_ID = require('./routes/idgen')
 
 
 const path = require('path')
-// const { userDB, ressourcesElementDB, imagesDB, ressourcesDb, newsletter } = require('./database/database')
-const fs = require('fs')
+// const { userDB, ressourcesElementDB, imagesDB, ressourcesDb, newsletter } >const fs = require('fs')
 
 const storage = multer.diskStorage({
     destination : (req, file, cb) => {
         cb(null, './images' )
     },
     filename : (req, file, cb) => {
-        cb(null, "image_" + Date.now() + path.extname(file.originalname))
+        cb(null, "image_" + Date.now() + path.extname(file.originalname))     
+    }
+})
+const filesStorage = multer.diskStorage({
+    destination : (req, file, cb) => {
+        cb(null, './files' )
+    },
+    filename : (req, file, cb) => {
+        cb(null, "files_" + Date.now() + path.extname(file.originalname))     
     }
 })
 
 app.use(cors())
 const upload = multer({ storage : storage})
+const files_upload = multer({ storage : filesStorage})
 app.use(bodyParser.urlencoded({extended : false}))
 app.use(bodyParser.json())
 // app.use('/assets', express.static('public'));
 app.use('/images', express.static('images'));
-// app.use('/api', API)
 
 https.createServer()
 
@@ -82,11 +89,11 @@ app.post('/api/newsletter', upload.single('image'), (req, res) => {
             key : keyImages,
             createdAt : new Date()
         } 
-        newsletter.put(keyImages, JSON.stringify(Newsletter))
+        newsletter.put(keyImages, Newsletter)
         console.log(Newsletter)
         res.json("mail")
 })
-app.delete('/api/newsletter/:id', upload.single('image'), (req, res) => {
+app.delete('/api/newsletter/:id', upload.single('image'), (req, res) => {     
         const { id } = req.params
 
         newsletter.del(id)
@@ -106,14 +113,14 @@ app.route('/api/image_content')
        res.json("images content")
     })
 
-app.post('/api/image_content', upload.single('image'), async (req, res) => {
+app.post('/api/image_content', upload.single('image'), async (req, res) => {  
 
         const image = req.file
         
         const response = {
             success : 1,
             file: {
-                url : "http://18.215.69.15:3000/images/" + image.filename,
+                url : "http://18.215.69.15:3000/images/" + image.filename,    
                 size : image.size,
                 filename : image.filename
             }
@@ -135,7 +142,7 @@ app.post('/api/image_content', upload.single('image'), async (req, res) => {
     
         }
 
-        console.log("==> image save to :", "http://18.215.69.15:3000"+response.file.url)
+        console.log("==> image save to :", "http://18.215.69.15:3000"+response.file.url) 
         res.json(response)
         
 })
@@ -144,8 +151,8 @@ app.post('/api/image_content', upload.single('image'), async (req, res) => {
 app.route('/api/fetchUrl')
     .get(async (req, res) => {
         const {url} = req.query
-        const metaData = await fetch(`https://jsonlink.io/api/extract?url=${url}`)
-        const { title, description, images, domain} = await metaData.json()
+        const metaData = await fetch(`https://jsonlink.io/api/extract?url=${url}`)        
+        const { title, description, images, domain} = await metaData.json()   
 
 
         const response = {
@@ -159,8 +166,8 @@ app.route('/api/fetchUrl')
                 }
             }
         }
-    console.log("==> url fetching for meta data : ", response.meta.title, response.link)
-    res.json(response)
+        console.log("==> url fetching for meta data : ", response.meta.title, response.link)
+        res.json(response)
 })
 
 
@@ -190,22 +197,28 @@ app.get('/api/inscription/:id', async (req, res) => {
     }
     
 })
+
 app.put('/api/inscription/:id', upload.single('image'), async (req, res) => {
     const { id } = req.params
     const data = req.body
-
+    const {name, surname, mail, tel, pw, town } = data
     console.log(data)
     try{
         const user = await userDB.get(id)
         console.log('==> get user with id: ', id)
         
-        res.json({data, user})
+        const ParseUser = JSON.parse(user)
+        const result = {...ParseUser, name, surname, mail, tel, pw, town, updatedAt : new Date()}    
+        userDB.put(id, JSON.stringify(result))
+
+        res.json(result)
     } catch (reason){
         console.log(reason)
         res.status(500)
     }
     
 })
+
 app.delete('/api/inscription/:id', async (req, res) => {
     const { id } = req.params
     
@@ -215,6 +228,7 @@ app.delete('/api/inscription/:id', async (req, res) => {
 
     res.json(`User with id : ${id}, has been remove correctly`)
 })
+
 
 // log in
 
@@ -269,7 +283,6 @@ app.post('/api/inscription/signin', upload.single('image'), async (req, res) => 
     }
 })
 
-
 // Ressources, All ressources routes
 
 
@@ -295,6 +308,7 @@ app.get('/api/ressources/:id', async (req, res) => {
         res.status(500)
     }
 });
+
 app.delete('/api/ressources/:id', async (req, res) => {
     const { id } = req.params
     
@@ -304,6 +318,7 @@ app.delete('/api/ressources/:id', async (req, res) => {
 
     res.json(`User with id : ${id}, has been remove correctly`)
 })
+
 // like
 app.put('/api/ressources/:id/like', async (req, res) => {
     const { id } = req.params
@@ -350,13 +365,41 @@ app.put('/api/ressources/:id/share', async (req, res) => {
     }
 });
 
-
-app.post('/api/ressources/', async (req, res) => {
+app.post('/api/ressources/', files_upload.array('files'), async (req, res) => {
     const { images, titre, description, createdAt, createdBy, categorie, like, download, share } = await req.body
+    const [...files ] = req.files
+ 
+    const files_Path = []
+
+    files.map(el => {
+        const keyImages = "" + Date.now() + "_" + generated_ID()
+        const object = {}
+        object.images = {
+            files_name : el.filename,
+            files_originalname : el.originalname, 
+            files_path : `/files/${el.filename}`,
+            files_size : el.size,
+            files_mimetype : el.mimetype,
+            createdAt : new Date()
+        }
+        object.path = `/files/${el.filename}`
+
+        files_db.put(keyImages, object)
+
+        files_Path.push({
+            files_name : object.images.files_name,
+            files_path : object.images.files_path,
+            files_mimetype : object.images.files_mimetype,
+            files_size : object.images.files_size,
+
+        })
+        console.log("==> image save to :", 'http://18.215.69.15:3000' + object.images.files_path)
+    })
+    
 
     try{
        const key = "" + Date.now() + "_" + generated_ID()
-        let ressources = { images, titre, description, createdAt, createdBy, categorie, like, download, share }
+        let ressources = { images, titre, description, createdAt, createdBy, categorie, like, download, share, files_Path }
 
         console.log(ressources)
         await ressourcesElementDB.put(key, ressources)
@@ -405,7 +448,6 @@ app.post('/api/images/', upload.array('image'), async (req, res) => {
     res.json(image_Path)
 })
 
-
 app.delete('/api/images/:id', upload.array('image'), async (req, res) => {
     const { id } = req.params
 
@@ -446,7 +488,6 @@ app.delete('/api/images/', upload.array('image'), async (req, res) => {
     res.json(' ')
 }) 
 
-
 // Articles, all Articles routes
 
 app.get('/api/articles/', async (req, res) => {
@@ -459,14 +500,11 @@ app.get('/api/articles/', async (req, res) => {
     res.json(tb)
 });
 
-
-
-
 app.post('/api/articles/', upload.array('image'), async (req, res) => {
     const { contenu, titre, imagesAlbum, google_images } = await req.body
-
+    const data_image = req.files
     const table = 'articles'
-
+        console.log(await req.body)
     const [...imges] = req.files  
     const imageData = []
     imges.map(el => {
@@ -482,7 +520,7 @@ app.post('/api/articles/', upload.array('image'), async (req, res) => {
         object.path = `/images/${el.filename}`
 
         imageData.push(object.path)
-        imagesDB.put(keyImages, JSON.stringify(object))
+        imagesDB.put(keyImages, object)
 
         return object
     })
@@ -496,7 +534,7 @@ app.post('/api/articles/', upload.array('image'), async (req, res) => {
         const article = {
             key : keyValue,
             images : imageData, 
-            google_images,
+            google_images : google_images,
             contenu : JSON.parse(contenu),
             titre : titre, 
             imagesAlbum : imagesAlbum,
@@ -511,7 +549,7 @@ app.post('/api/articles/', upload.array('image'), async (req, res) => {
 
         params.Item = article
 
-        ressourcesDb.put(keyValue, JSON.stringify(params))
+        ressourcesDb.put(keyValue, params)
         console.log('==> articles enregistre : ', "key : " + keyValue)
 
         res.json(article)
@@ -539,6 +577,7 @@ app.get('/api/articles/edit/:id', async (req, res) => {
 
     const data = await ressourcesDb.get(id)
     res.json(data)
+
 });
 
 // contact-us
@@ -560,6 +599,7 @@ app.get('/api/contact/:id', async (req, res) => {
     const data = await requete.get(id)
     res.json(data)
 });
+
 app.delete('/api/contact/:id', async (req, res) => {
     
     const { id } = req.params
@@ -569,7 +609,6 @@ app.delete('/api/contact/:id', async (req, res) => {
     console.log('==> DEL request /contact/'+id+ ' is a succes')
     res.json('delete')
 });
-
 
 app.post('/api/contact/',  upload.single('image'), async (req, res) => {
 
@@ -595,8 +634,11 @@ app.post('/api/contact/',  upload.single('image'), async (req, res) => {
     
 });
 
-
-
-app.listen(4000, () => {
-  console.log('Listening');
+app.listen(8080, () => {
+  console.log('Listening on port 8080');
 });
+
+const cred = {
+    key, cert
+}
+const HTTPS = https.createServer()
